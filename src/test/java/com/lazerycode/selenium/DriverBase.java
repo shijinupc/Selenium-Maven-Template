@@ -4,8 +4,8 @@ import com.lazerycode.selenium.config.DriverFactory;
 import com.lazerycode.selenium.listeners.ScreenshotListener;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterSuite;
-import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Listeners;
 
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ public class DriverBase {
     private static List<DriverFactory> webDriverThreadPool = Collections.synchronizedList(new ArrayList<DriverFactory>());
     private static ThreadLocal<DriverFactory> driverFactoryThread;
 
-    @BeforeSuite(alwaysRun = true)
+    @BeforeTest(alwaysRun = true)
     public static void instantiateDriverObject() {
         driverFactoryThread = ThreadLocal.withInitial(() -> {
             DriverFactory driverFactory = new DriverFactory();
@@ -40,7 +40,7 @@ public class DriverBase {
         }
     }
 
-    @AfterSuite(alwaysRun = true)
+    @AfterTest(alwaysRun = true)
     public static void closeDriverObjects() {
         for (DriverFactory driverFactory : webDriverThreadPool) {
             driverFactory.quitDriver();

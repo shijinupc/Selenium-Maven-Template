@@ -6,6 +6,7 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.ie.InternetExplorerOptions;
 import org.openqa.selenium.opera.OperaDriver;
@@ -25,6 +26,13 @@ public enum DriverType implements DriverSetup {
             FirefoxOptions options = new FirefoxOptions();
             options.merge(capabilities);
             options.setHeadless(HEADLESS);
+            
+            FirefoxProfile fp = new FirefoxProfile();
+            String locale = System.getProperty("language");
+			if(locale != null){
+				fp.setPreference("intl.accept_languages", locale);
+			}
+            options.setProfile(fp);
 
             return new FirefoxDriver(options);
         }
@@ -39,7 +47,11 @@ public enum DriverType implements DriverSetup {
             options.setHeadless(HEADLESS);
             options.addArguments("--no-default-browser-check");
             options.setExperimentalOption("prefs", chromePreferences);
-
+            
+            String locale = System.getProperty("language");
+    		if(locale !=null){
+    			options.addArguments("--lang=" + locale);
+    		}
             return new ChromeDriver(options);
         }
     },

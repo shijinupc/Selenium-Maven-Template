@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -16,6 +17,8 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 
 import com.lazerycode.selenium.DriverBase;
+import com.lazerycode.selenium.utils.SeleniumScreenCapture;
+import com.lazerycode.selenium.utils.TVTUtil;
 
 public class BaseTest extends DriverBase {
 	protected WebDriver driver;
@@ -44,7 +47,10 @@ public class BaseTest extends DriverBase {
         }
     }
 	
-    protected void captureElement(WebElement element, String fileName) {
+    protected void captureElement(String cssSelector, String fileName) {
+    	By by = By.cssSelector(cssSelector);
+		TVTUtil.waitUntilPresence(driver, by);
+		WebElement element = driver.findElement(by);
         try {
             FileOutputStream screenshotStream = new FileOutputStream(new File(getImageDir(), fileName));
             screenshotStream.write(element.getScreenshotAs(OutputType.BYTES));
@@ -53,6 +59,14 @@ public class BaseTest extends DriverBase {
             System.err.println("Unable to write " + new File(getImageDir(), fileName).getAbsolutePath());
             unableToWriteScreenshot.printStackTrace();
         }
+    }
+    
+    protected void captureTitle(String cssSelector, String fileName) {
+    	By by = By.cssSelector(cssSelector);
+		TVTUtil.waitUntilPresence(driver, by);
+		WebElement element = driver.findElement(by);
+		String filepath = new File(getImageDir(), fileName).getAbsolutePath();
+		SeleniumScreenCapture.captureTitle(driver, filepath, element);
     }
     
     @Parameters({ "locale" })

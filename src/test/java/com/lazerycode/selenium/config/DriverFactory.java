@@ -70,7 +70,7 @@ public class DriverFactory {
         System.out.println(" ");
 
         DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
-
+        desiredCapabilities.setAcceptInsecureCerts(true);
         if (proxyEnabled) {
             Proxy proxy = new Proxy();
             proxy.setProxyType(MANUAL);
